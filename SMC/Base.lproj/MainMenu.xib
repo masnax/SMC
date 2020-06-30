@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="GzC-gU-4Uq"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="SMC" customModuleProvider="target">
+            <connections>
+                <outlet property="statusMenu" destination="FTO-iA-hf6" id="uDy-Lt-ofq"/>
+            </connections>
+        </customObject>
+        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+        <menu id="FTO-iA-hf6">
+            <items>
+                <menuItem title="Fans:" id="Cmg-c7-kNL">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="rJZ-Jy-2qp"/>
+                <menuItem title="Temps:" id="fHZ-Ff-y4e">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="YIa-lz-W15"/>
+                <menuItem title="Turn Fan Off" id="6Uw-Xc-A1K">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="directOff:" target="Voe-Tx-rLC" id="L7m-Hs-ZwK"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Reset SMC Settings" id="W8a-RK-nA9">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="directAuto:" target="Voe-Tx-rLC" id="fYF-aV-P9h"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Set Fan Speed" id="ODv-1V-GZv">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Set Fan Speed" id="C1v-dA-bqg">
+                        <items>
+                            <menuItem title="1000" id="sxF-Vn-4oJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct1000:" target="Voe-Tx-rLC" id="5Gw-nv-Bh3"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="2000" id="aNn-LV-uNc">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct2000:" target="Voe-Tx-rLC" id="sxP-Bs-AYb"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="3000" id="jkk-cR-ZJu">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct3000:" target="Voe-Tx-rLC" id="uvW-2U-GKr"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="4000" id="fTt-JW-PCJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct4000:" target="Voe-Tx-rLC" id="l05-Mb-Hcb"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="5000" id="jMO-Ac-Lzt">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct5000:" target="Voe-Tx-rLC" id="CQf-sF-Tvj"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="6000" id="YXS-oX-39R">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct6000:" target="Voe-Tx-rLC" id="O6m-EV-STv"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="7000" id="K9b-9I-A4Z">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct7000:" target="Voe-Tx-rLC" id="qhe-te-Udq"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="8000" id="fc5-zp-7G2">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="direct8000:" target="Voe-Tx-rLC" id="5eq-ei-iUn"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Set Stats Counter" id="vk9-ie-5KC" userLabel="Set Stats Counter">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Set Stats Counter" id="KhA-Rd-Hma">
+                        <items>
+                            <menuItem title="Num" id="6zK-Qo-hqm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="1" id="4h4-h2-c1g" userLabel="1">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit1:" target="Voe-Tx-rLC" id="bh2-UU-YCQ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="2" id="gdi-qu-M0I" userLabel="2">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit2:" target="Voe-Tx-rLC" id="5QS-aI-ATX"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="3" id="R4H-To-oLZ" userLabel="3">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit3:" target="Voe-Tx-rLC" id="bxp-rX-SSn"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="4" id="yBC-eZ-6aj">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit4:" target="Voe-Tx-rLC" id="Yvn-ew-GSd"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="5" id="bMy-Qd-Tdj">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit5:" target="Voe-Tx-rLC" id="zkM-GK-DbI"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="6" id="qZq-dT-9GC">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit6:" target="Voe-Tx-rLC" id="DbP-Fq-aqt"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="7" id="iZE-90-v8W">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit7:" target="Voe-Tx-rLC" id="SnR-B3-Ify"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="8" id="V5g-QN-M6x">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit8:" target="Voe-Tx-rLC" id="2iV-XD-VCx"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="9" id="pe0-d7-e7Z">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit9:" target="Voe-Tx-rLC" id="dGv-RT-alp"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="10" id="cMX-Xz-L5E">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="statsLimit10:" target="Voe-Tx-rLC" id="Zyh-N3-YgY"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Quit" id="p2p-6z-94K">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="directQuit:" target="Voe-Tx-rLC" id="87p-LX-eWn"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="-85" y="-104"/>
+        </menu>
+        <userDefaultsController representsSharedInstance="YES" id="l90-Z1-HFG"/>
+    </objects>
+</document>
