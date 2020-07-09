@@ -337,6 +337,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
 
     
     func installHelper() {
+        if let cmd1 = Bundle.main.path(forResource: "list-temps", ofType: nil, inDirectory: "Scripts"),
+        let cmd2 = Bundle.main.path(forResource: "list-fans", ofType: nil, inDirectory: "Scripts"),
+        let cmd3 = Bundle.main.path(forResource: "smc", ofType: nil, inDirectory: "Scripts"),
+        let cmd4 = Bundle.main.path(forResource: "smc-set", ofType: nil, inDirectory: "Scripts"),
+        let cmd5 = Bundle.main.path(forResource: "byte-array", ofType: nil, inDirectory: "Scripts") {
+            let (_, _, _) = shell(cmd: "/bin/chmod", args: "+x", cmd1, cmd2, cmd3, cmd4, cmd5)
+        }
+        
+        
         let (stdout, _, _) = shell(cmd: "/bin/ls", args: "/Library/PrivilegedHelperTools")
         if !stdout.contains("com.masnax.SwiftPrivilegedHelper") {
             do {
