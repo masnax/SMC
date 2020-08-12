@@ -1,7 +1,0 @@
-#!/usr/local/bin/python3
-
-
-import struct 
-import sys
-flt=float(sys.argv[1])
-print(bytearray(struct.pack("f", flt)).hex())

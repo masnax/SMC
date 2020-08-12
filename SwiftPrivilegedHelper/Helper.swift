@@ -83,20 +83,25 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
         completion(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0")
     }
 
-    func runCommandLs(withPath path: [String], withVal val: String, completion: @escaping (NSNumber) -> Void) {
+    func runCommandLs(withPath path: String, withVal val: String, completion: @escaping (NSNumber) -> Void) {
         let cwd = FileManager.default.currentDirectoryPath
         print("script run from:\n" + cwd)
 
 
         // For security reasons, all commands should be hardcoded in the helper
         let command:String
-        let arguments:[String]
+        var arguments:[String]
+        command = "/usr/bin/sudo"
         if val != "R" {
-            command = path[0]
-            arguments = [val, path[0]]
+            var flt:Float = Float(val)!
+            let data = Data(buffer: UnsafeBufferPointer(start: &flt, count: 1))
+            let fanSpeed = data.map { String(format: "%02x", $0) }.joined()
+            arguments = [path, "-k", "F0Md", "-w", "01"]
+            self.runTask(command: command, arguments: arguments, completion: completion)
+            arguments = [path, "-k", "F0Tg", "-w", fanSpeed]
+            self.runTask(command: command, arguments: arguments, completion: completion)
         } else {
-            command = path[1]
-            arguments = ["-k", "F0Md", "-w", "00"]
+            arguments = [path, "-k", "F0Md", "-w", "00"]
         }
         self.runTask(command: command, arguments: arguments, completion: completion)
     
@@ -111,7 +116,7 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
             return
         }
 
-        self.runCommandLs(withPath: [], withVal: path, completion: completion)
+        self.runCommandLs(withPath: "", withVal: path, completion: completion)
     }
 
     // MARK: -

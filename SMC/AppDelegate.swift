@@ -99,7 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
     }
     
     func updateTemps(menu: NSMenu) -> NSMenu {
-        if let command = Bundle.main.path(forResource: "list-temps", ofType: nil, inDirectory: "Scripts") {
+        if let command = Bundle.main.path(forResource: "list-temps", ofType: "sh", inDirectory: "Scripts") {
             let (stdout, _, _) = shell(cmd: command, args: numStats, command)
             for row in stdout {
                 let menuRow = NSMenuItem(title: "   " + row, action: nil, keyEquivalent: "")
@@ -110,7 +110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
     }
     
     func updateFans(menu: NSMenu) -> NSMenu {
-        if let command = Bundle.main.path(forResource: "list-fans", ofType: nil, inDirectory: "Scripts") {
+        if let command = Bundle.main.path(forResource: "list-fans", ofType: "sh", inDirectory: "Scripts") {
             let (stdout, _, _) = shell(cmd: command, args: command)
             for row in stdout {
                 let menuRow = NSMenuItem(title: "   " + row, action: nil, keyEquivalent: "")
@@ -337,12 +337,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
 
     
     func installHelper() {
-        if let cmd1 = Bundle.main.path(forResource: "list-temps", ofType: nil, inDirectory: "Scripts"),
-        let cmd2 = Bundle.main.path(forResource: "list-fans", ofType: nil, inDirectory: "Scripts"),
-        let cmd3 = Bundle.main.path(forResource: "smc", ofType: nil, inDirectory: "Scripts"),
-        let cmd4 = Bundle.main.path(forResource: "smc-set", ofType: nil, inDirectory: "Scripts"),
-        let cmd5 = Bundle.main.path(forResource: "byte-array", ofType: nil, inDirectory: "Scripts") {
-            let (_, _, _) = shell(cmd: "/bin/chmod", args: "+x", cmd1, cmd2, cmd3, cmd4, cmd5)
+        if let cmd1 = Bundle.main.path(forResource: "list-temps", ofType: "sh", inDirectory: "Scripts"),
+        let cmd2 = Bundle.main.path(forResource: "list-fans", ofType: "sh", inDirectory: "Scripts"),
+        let cmd3 = Bundle.main.path(forResource: "smc", ofType: nil, inDirectory: "Scripts") {
+            let (_, _, _) = shell(cmd: "/bin/chmod", args: "+x", cmd1, cmd2, cmd3)
         }
         
         
@@ -361,9 +359,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
         guard
             let inputValue = self.inputPath,
             let helper = self.helper(nil),
-            let smc_set = Bundle.main.path(forResource: "smc-set", ofType: nil, inDirectory: "Scripts"),
             let smc = Bundle.main.path(forResource: "smc", ofType: nil, inDirectory: "Scripts") else {return}
-        helper.runCommandLs(withPath: [smc_set, smc], withVal: inputValue) { (exitCode) in}
+        helper.runCommandLs(withPath: smc, withVal: inputValue) { (exitCode) in}
     }
 
     // MARK: -
