@@ -64,7 +64,6 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
             let fanSpeed = data.map { String(format: "%02x", $0) }.joined()
             arguments = [path, "-k", "F0Md", "-w", "01"]
             self.runTask(command: command, arguments: arguments, completion: completion)
-            usleep(100000) // 100ms sleep to let the C program complete
             arguments = [path, "-k", "F0Tg", "-w", fanSpeed]
             self.runTask(command: command, arguments: arguments, completion: completion)
         } else {
