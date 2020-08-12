@@ -19,7 +19,6 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
     // MARK: Private Variables
 
     private var connections = [NSXPCConnection]()
-    private var shouldQuit = false
     private var shouldQuitCheckInterval = 1.0
 
     // MARK: -
@@ -33,13 +32,7 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
 
     public func run() {
         self.listener.resume()
-
-        // Keep the helper tool running until the variable shouldQuit is set to true.
-        // The variable should be changed in the "listener(_ listener:shoudlAcceptNewConnection:)" function.
-
-        while !self.shouldQuit {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: self.shouldQuitCheckInterval))
-        }
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: self.shouldQuitCheckInterval))
     }
 
     // MARK: -
@@ -51,24 +44,9 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
         guard self.isValid(connection: connection) else {
             return false
         }
-
-        // Set the protocol that the calling application conforms to.
-        connection.remoteObjectInterface = NSXPCInterface(with: AppProtocol.self)
-
         // Set the protocol that the helper conforms to.
         connection.exportedInterface = NSXPCInterface(with: HelperProtocol.self)
         connection.exportedObject = self
-
-        // Set the invalidation handler to remove this connection when it's work is completed.
-        connection.invalidationHandler = {
-            if let connectionIndex = self.connections.firstIndex(of: connection) {
-                self.connections.remove(at: connectionIndex)
-            }
-
-            if self.connections.isEmpty {
-                self.shouldQuit = true
-            }
-        }
 
         self.connections.append(connection)
         connection.resume()
@@ -76,35 +54,23 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
         return true
     }
 
-    // MARK: -
-    // MARK: HelperProtocol Methods
-
-    func getVersion(completion: (String) -> Void) {
-        completion(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0")
-    }
-
     func runCommandLs(withPath path: String, withVal val: String, completion: @escaping (NSNumber) -> Void) {
-        let cwd = FileManager.default.currentDirectoryPath
-        print("script run from:\n" + cwd)
-
-
         // For security reasons, all commands should be hardcoded in the helper
-        let command:String
+        let command:String = "/usr/bin/sudo" // !!!!
         var arguments:[String]
-        command = "/usr/bin/sudo"
         if val != "R" {
             var flt:Float = Float(val)!
             let data = Data(buffer: UnsafeBufferPointer(start: &flt, count: 1))
             let fanSpeed = data.map { String(format: "%02x", $0) }.joined()
             arguments = [path, "-k", "F0Md", "-w", "01"]
             self.runTask(command: command, arguments: arguments, completion: completion)
+            usleep(100000) // 100ms sleep to let the C program complete
             arguments = [path, "-k", "F0Tg", "-w", fanSpeed]
             self.runTask(command: command, arguments: arguments, completion: completion)
         } else {
             arguments = [path, "-k", "F0Md", "-w", "00"]
         }
         self.runTask(command: command, arguments: arguments, completion: completion)
-    
     }
 
     func runCommandLs(withPath path: String, authData: NSData?, completion: @escaping (NSNumber) -> Void) {
@@ -135,9 +101,6 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
         do {
             try HelperAuthorization.verifyAuthorization(authData, forCommand: command)
         } catch {
-            if let remoteObject = self.connection()?.remoteObjectProxy as? AppProtocol {
-                remoteObject.log(stdErr: "Authentication Error: \(error)")
-            }
             return false
         }
         return true
@@ -153,20 +116,12 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
 
         let stdOutHandler =  { (file: FileHandle!) -> Void in
             let data = file.availableData
-            guard let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return }
-            if let remoteObject = self.connection()?.remoteObjectProxy as? AppProtocol {
-                remoteObject.log(stdOut: output as String)
-            }
         }
         stdOut.fileHandleForReading.readabilityHandler = stdOutHandler
 
         let stdErr:Pipe = Pipe()
         let stdErrHandler =  { (file: FileHandle!) -> Void in
             let data = file.availableData
-            guard let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return }
-            if let remoteObject = self.connection()?.remoteObjectProxy as? AppProtocol {
-                remoteObject.log(stdErr: output as String)
-            }
         }
         stdErr.fileHandleForReading.readabilityHandler = stdErrHandler
 

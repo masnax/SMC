@@ -10,7 +10,7 @@ import Cocoa
 import ServiceManagement
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
+class AppDelegate: NSObject, NSApplicationDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     // MARK: -
     // MARK: IBOutlets
@@ -389,7 +389,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
         }
 
         let connection = NSXPCConnection(machServiceName: HelperConstants.machServiceName, options: .privileged)
-        connection.exportedInterface = NSXPCInterface(with: AppProtocol.self)
+        connection.exportedInterface = NSXPCInterface()
         connection.exportedObject = self
         connection.remoteObjectInterface = NSXPCInterface(with: HelperProtocol.self)
         connection.invalidationHandler = {
@@ -414,30 +414,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, AppProtocol {
             if let onCompletion = completion { onCompletion(false) }
         }) as? HelperProtocol else { return nil }
         return helper
-    }
-
-    func helperStatus(completion: @escaping (_ installed: Bool) -> Void) {
-
-        // Comppare the CFBundleShortVersionString from the Info.plist in the helper inside our application bundle with the one on disk.
-
-        
-        let helperURL = Bundle.main.bundleURL.appendingPathComponent("Contents/Library/LaunchServices/" + HelperConstants.machServiceName)
-        guard
-            let helperBundleInfo = CFBundleCopyInfoDictionaryForURL(helperURL as CFURL) as? [String: Any],
-            let helperVersion = helperBundleInfo["CFBundleShortVersionString"] as? String,
-            let helper = self.helper(completion) else {
-                completion(false)
-                return
-        }
-//        print(helperBundleInfo, helperVersion)
-
-        
-        let compute = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        print(helperVersion == compute)
-        
-        helper.getVersion { installedHelperVersion in
-            completion(installedHelperVersion == helperVersion)
-        }
     }
 
     func helperInstall() throws -> Bool {
