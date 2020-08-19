@@ -334,6 +334,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.terminate(self)
     }
     
+    @IBAction func directUninstall(_ sender: Any) {
+        let menuItem = sender as? NSMenuItem
+        if (helperIsInstalled) {
+            guard
+                let helper = self.helper(nil)
+            else {
+                return
+            }
+            helper.runCommandLs(withPath: "", withVal: "uninstall") { (exitCode) in}
+            menuItem?.title = "Install Helper"
+            helperIsInstalled = false
+        } else {
+            installHelper()
+            menuItem?.title = "Remove Helper"
+            helperIsInstalled = true
+        }
+
+    }
 
     
     func installHelper() {
@@ -359,25 +377,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard
             let inputValue = self.inputPath,
             let helper = self.helper(nil),
-            let smc = Bundle.main.path(forResource: "smc", ofType: nil, inDirectory: "Scripts") else {return}
+            let smc = Bundle.main.path(forResource: "smc", ofType: nil, inDirectory: "Scripts")
+        else {
+            return
+        }
         helper.runCommandLs(withPath: smc, withVal: inputValue) { (exitCode) in}
-    }
-
-    // MARK: -
-    // MARK: AppProtocol Methods
-
-    func log(stdOut: String) {
-        guard !stdOut.isEmpty else { return }
-        OperationQueue.main.addOperation {
-//            self.textViewOutput.appendText(stdOut)
-        }
-    }
-
-    func log(stdErr: String) {
-        guard !stdErr.isEmpty else { return }
-        OperationQueue.main.addOperation {
-//            self.textViewOutput.appendText(stdErr)
-        }
     }
 
     // MARK: -
@@ -416,7 +420,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return helper
     }
 
-    func helperInstall() throws -> Bool {
+    func helperInstall() throws {
 
         // Install and activate the helper inside our application bundle to disk.
 
@@ -426,14 +430,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         guard
             let authRef = try HelperAuthorization.authorizationRef(&authRights, nil, [.interactionAllowed, .extendRights, .preAuthorize]),
-            SMJobBless(kSMDomainSystemLaunchd, HelperConstants.machServiceName as CFString, authRef, &cfError) else {
-                if let error = cfError?.takeRetainedValue() { throw error }
-                return false
+            SMJobBless(kSMDomainSystemLaunchd, HelperConstants.machServiceName as CFString, authRef, &cfError)
+        else {
+            if let error = cfError?.takeRetainedValue() { throw error }
+            return
         }
 
         self.currentHelperConnection?.invalidate()
         self.currentHelperConnection = nil
-        return true
+        self.helperIsInstalled = true
     }
 }
 

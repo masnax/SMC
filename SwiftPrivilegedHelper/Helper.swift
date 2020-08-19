@@ -58,7 +58,13 @@ class Helper: NSObject, NSXPCListenerDelegate, HelperProtocol {
         // For security reasons, all commands should be hardcoded in the helper
         let command:String = "/usr/bin/sudo" // !!!!
         var arguments:[String]
-        if val != "R" {
+        if val == "uninstall" {
+            let helper:String = "/Library/PrivilegedHelperTools/"+HelperConstants.machServiceName
+            let daemon:String = "/Library/LaunchDaemons/"+HelperConstants.machServiceName+".plist"
+            arguments = ["rm", "-rf", helper, daemon]
+            self.runTask(command: command, arguments: arguments, completion: completion)
+        }
+        else if val != "R" {
             var flt:Float = Float(val)!
             let data = Data(buffer: UnsafeBufferPointer(start: &flt, count: 1))
             let fanSpeed = data.map { String(format: "%02x", $0) }.joined()

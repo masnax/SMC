@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17147" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17147"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -46,7 +47,7 @@
                             <menuItem title="1000" id="sxF-Vn-4oJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="direct1000:" target="Voe-Tx-rLC" id="5Gw-nv-Bh3"/>
+                                    <action selector="direct1000:" target="Voe-Tx-rLC" id="W8D-yM-vkj"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="2000" id="aNn-LV-uNc">
@@ -164,6 +165,13 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem isSeparatorItem="YES" id="sBh-2g-Kyk"/>
+                <menuItem title="Remove Helper" id="cg3-qH-7JK">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="directUninstall:" target="Voe-Tx-rLC" id="WAp-aV-aT6"/>
+                    </connections>
+                </menuItem>
                 <menuItem title="Quit" id="p2p-6z-94K">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
@@ -171,7 +179,7 @@
                     </connections>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="-85" y="-104"/>
+            <point key="canvasLocation" x="-66" y="-104"/>
         </menu>
         <userDefaultsController representsSharedInstance="YES" id="l90-Z1-HFG"/>
     </objects>
